@@ -43,8 +43,8 @@ class StoreController extends Controller
             'price' => $request->input('is_free') ? null : $request->input('price'),
             'unit' => $request->input('unit'),
             'address' => $request->input('address'),
-            'image_url' => $imagePath ? 'storage/' . $imagePath : null,
-            'status' => 'pending', // Lưu với trạng thái 'pending'
+            'image_url' => $imagePath ? 'storage/' . $imagePath : null, 
+            'status' => 'pending',
             'product_name' => $request->input('product_name'),
         ]);
 

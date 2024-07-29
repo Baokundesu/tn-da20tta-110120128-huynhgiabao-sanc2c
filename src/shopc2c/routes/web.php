@@ -96,9 +96,10 @@ Route::prefix('cart')->group(function () {
     Route::post('/checkout', [CartController::class, 'processCheckout'])->name('cart.processCheckout');
     Route::get('/success', [CartController::class, 'showSuccess'])->name('cart.success');
 
-    Route::post('/cod_success', [CartController::class, 'showCodSuccess'])->name('cart.cod_success');
-    Route::match(['get', 'post'], '/vnp/success', [CartController::class, 'showVnpSuccess'])->name('cart.vnp_success');
-    Route::match(['get', 'post'], '/momo/success', [CartController::class, 'showMomoSuccess'])->name('cart.momo_success');
+    Route::get('/cart/success', [CartController::class, 'showCodSuccess'])->name('cart.success');
+    Route::get('/cart/momo_success', [CartController::class, 'showMomoSuccess'])->name('cart.momo_success');
+    Route::get('/cart/vnp_success', [CartController::class, 'showVnpSuccess'])->name('cart.vnp_success');
 });
 
-// Route cho trang đơn hàng
+//Route cho trang quản lý đơn hàng
+Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');

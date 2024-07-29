@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Store;
 use App\Models\Cart;
+use App\Models\Order;
+use App\Models\OrderItem;
 
 class CartController extends Controller
 {
@@ -95,13 +98,53 @@ class CartController extends Controller
 
     public function cod_payment(Request $request)
     {
+        $cartItems = Cart::where('user_id', auth()->id())->get();
+        
+        // Tạo đơn hàng
+        $order = new Order();
+        $order->user_id = auth()->id();
+        $order->status = 'confirmed'; // Hoặc bất kỳ trạng thái nào bạn muốn
+        $order->total_price = $cartItems->sum(function($item) {
+            return $item->price * $item->quantity;
+        });
+        $order->save();
+        
+        // Lưu chi tiết đơn hàng
+        foreach ($cartItems as $item) {
+            DB::table('order_items')->insert([
+                'order_id' => $order->id,
+                'store_id' => $item->store_id,
+                'product_name' => $item->product_name,
+                'price' => $item->price,
+                'quantity' => $item->quantity,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        // Xóa giỏ hàng
         Cart::where('user_id', auth()->id())->delete();
-        return redirect()->route('cart.success');
+        
+        // Chuyển hướng đến trang thanh toán thành công với chi tiết đơn hàng
+        return redirect()->route('cart.success', ['order_id' => $order->id]);
     }
 
-    public function showCodSuccess()
+    public function showCodSuccess(Request $request)
     {
-        return view('cart.success');
+        // Lấy đơn hàng vừa tạo từ tham số `order_id`
+        $orderId = $request->input('order_id');
+        $order = Order::where('id', $orderId)->where('user_id', auth()->id())->first();
+        
+        if ($order) {
+            // Lấy chi tiết đơn hàng nếu đơn hàng tồn tại
+            $orderItems = DB::table('order_items')->where('order_id', $order->id)->get();
+        } else {
+            // Nếu không tìm thấy đơn hàng, chuyển hướng về trang giỏ hàng
+            return redirect()->route('cart.index')->with('error', 'Không tìm thấy đơn hàng.');
+        }
+
+        // Truyền biến đến view
+        return view('cart.cod_success', compact('order', 'orderItems'));
     }
 
     public function momo_payment(Request $request)
@@ -226,20 +269,32 @@ class CartController extends Controller
         return redirect($vnp_Url);
     }
 
-    public function showVnpSuccess(Request $request)
+    public function showSuccess(Request $request)
     {
-        Cart::where('user_id', auth()->id())->delete();
-        return $this->showSuccess();
+        // Lấy đơn hàng mới nhất của người dùng
+        $order = Order::where('user_id', auth()->id())->latest()->first();
+        
+        if ($order) {
+            // Lấy chi tiết đơn hàng nếu đơn hàng tồn tại
+            $orderItems = DB::table('order_items')->where('order_id', $order->id)->get();
+        } else {
+            // Nếu không tìm thấy đơn hàng, chuyển hướng về trang giỏ hàng
+            return redirect()->route('cart.index')->with('error', 'Không tìm thấy đơn hàng.');
+        }
+
+        // Truyền biến đến view
+        return view('cart.success', compact('order', 'orderItems'));
     }
 
     public function showMomoSuccess(Request $request)
     {
         Cart::where('user_id', auth()->id())->delete();
-        return $this->showSuccess();
+        return $this->showSuccess($request);
     }
 
-    public function showSuccess()
+    public function showVnpSuccess(Request $request)
     {
-        return view('cart.success');
+        Cart::where('user_id', auth()->id())->delete();
+        return $this->showSuccess($request);
     }
 }

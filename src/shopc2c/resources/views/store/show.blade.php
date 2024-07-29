@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-md-6">
             @if ($store->image_url)
-                <img src="{{ asset($store->image_url) }}" alt="Store Image" class="img-fluid">
+                <img src="{{ asset('/' . $store->image_url) }}" alt="Store Image" class="img-fluid">
             @else
                 <img src="https://via.placeholder.com/600" alt="No Image Available" class="img-fluid">
             @endif
@@ -33,8 +33,8 @@
                     <input type="number" name="quantity" id="quantity" value="1" min="1" class="form-control mb-2" style="width: 100px;">
                     <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>
                 </form>                
-                <br>
-                <button class="btn btn-success">Mua ngay</button>
+                {{-- <br>
+                <button class="btn btn-success">Mua ngay</button> --}}
             </div>
         </div>
     </div>

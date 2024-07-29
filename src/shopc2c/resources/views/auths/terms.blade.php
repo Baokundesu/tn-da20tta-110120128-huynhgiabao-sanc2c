@@ -83,8 +83,8 @@
         <h2>9. Liên hệ</h2>
         <p>Nếu bạn có bất kỳ câu hỏi hoặc cần hỗ trợ, vui lòng liên hệ với chúng tôi qua thông tin sau:</p>
         <ul>
-            <li>Email: support@tradingplatform.com</li>
-            <li>Hotline: 123-456-789</li>
+            <li>Email: support@nongsan.com</li>
+            <li>Hotline: 0123456789</li>
         </ul>
 
         <p>Cảm ơn bạn đã sử dụng Sàn Giao dịch Nông sản của chúng tôi. Chúc bạn có những trải nghiệm mua bán tuyệt vời!</p>

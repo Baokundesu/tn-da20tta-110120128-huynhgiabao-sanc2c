@@ -25,7 +25,7 @@ class Cart extends Model
 
     public function getKeyName()
     {
-        return null; // Eloquent mong đợi một khóa chính duy nhất, do đó chúng tôi trả về null
+        return null; 
     }
 
     public function setKeysForSaveQuery($query)
