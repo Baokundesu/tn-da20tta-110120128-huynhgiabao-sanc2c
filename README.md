@@ -10,7 +10,7 @@
 
 1. Clone repository về máy của bạn:
     ```sh
-    git clone <URL của dự án>
+    git clone https://github.com/Baokundesu/tn-da20tta-110120128-huynhgiabao-sanc2c.git
     ```
 2. Mở thư mục dự án trong [VS Code](https://code.visualstudio.com/).
 
