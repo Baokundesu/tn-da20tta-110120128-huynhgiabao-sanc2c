@@ -55,44 +55,5 @@
             <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
         </form>
     </div>
-
-    <!-- Phần đơn hàng chờ xác nhận -->
-    <div class="right-column flex-fill">
-        <h2>Đơn hàng chờ xác nhận</h2>
-        @if ($pendingOrders->isEmpty())
-            <p>Không có đơn hàng nào đang chờ xác nhận.</p>
-        @else
-            <ul>
-                @foreach ($pendingOrders as $order)
-                    <li>
-                        <h3>Đơn hàng #{{ $order->id }}</h3>
-                        <p>Trạng thái: {{ $order->status }}</p>
-                        <ul>
-                            @foreach ($order->items as $item)
-                                <li>{{ $item->product_name }} - {{ $item->quantity }} x {{ $item->price }} VND</li>
-                            @endforeach
-                        </ul>
-                        @if ($order->status == 'pending')
-                            <form action="{{ route('order.user-cancel', $order->id) }}" method="POST">
-                                @csrf
-                                <div class="form-group">
-                                    <label for="reason">Lý do hủy:</label>
-                                    <select name="reason" id="reason" class="form-control">
-                                        <option value="Hết hàng">Hết hàng</option>
-                                        <option value="Lý do thời tiết">Lý do thời tiết</option>
-                                        <option value="Lý do vận chuyển">Lý do vận chuyển</option>
-                                        <option value="Lý do khác">Lý do khác</option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn btn-danger btn-sm">Hủy đơn hàng</button>
-                            </form>
-                        @endif
-                    </li>
-                @endforeach
-            </ul>
-
-            {{ $pendingOrders->links() }}
-        @endif
-    </div>
 </div>
 @endsection
